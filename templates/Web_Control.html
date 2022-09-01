@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+
+        li {list-style: none;cursor: pointer}
+        a{text-decoration: none;text-align: center}
+        /*标题界面*/
+
+        .time_box{
+            width: 300px;height: 60px;background-color: wheat;
+            font-size: 30px;text-align: center;line-height: 60px;float: right;
+        }
+
+        /*控制界面*/
+        .c_box {
+            float: left;width: 200px;height: 245px;
+            position: relative;top: 40px;
+        }
+
+        .show_box, .img_box {width: 200px;border: 1px;}
+        .show_box {line-height: 45px;text-align: center;font-size: 24px;}
+        .img_box {background-size: 200px;}
+        .a:hover{content: url('../static/images/光照过强.png')}
+        .b:hover{content: url('../static/images/湿度高.png')}
+        .c:hover{content: url('../static/images/温度高.png')}
+
+
+        /*控制界面按钮*/
+        .s_btn {
+            float: left;width: 100px;height: 35px;border: rgba(0, 0, 0, .5) 5px solid;
+            background-color: #a1e9d9;font-size: 20px;text-align: center;
+            position: relative;
+        }
+        .s_btn:hover{color: red;background-color: wheat;}
+        .s_btn:active{background-color: white;}
+
+        /*控制选项界面*/
+        .set_box {width: 400px;height: 300px;margin: 0 auto;display: none;}
+        .cls{
+            display: block;width: 50px;height: 20px;position: relative;
+            background: orangered;border: 2px grey solid;color: white;
+            padding: 5px 8px;font-size: 20px;line-height: 20px;
+            outline: none;box-shadow: 2px 2px 0 ;text-align: center;
+        }
+        .cls:active{background-color: grey;color: black}
+        /*灯光 监控按钮*/
+        .btn_lg,.btn_lgc,.btn_lgs,.btn_video{
+            display: block;width: 60px;height: 25px;background-color: gainsboro;
+            font-size: 16px;border: 2px grey solid;position: relative;
+            text-align: center;text-decoration: none;
+        }
+        #open{background-color:skyblue}
+        .open_div i:hover{
+            background-color: red;
+        }
+
+    </style>
+</head>
+<body style="cursor: default;background-image: url('../static/images/bg.png')">
+<div style="height: 60px;background-color: #999999">
+    <img src="../static/images/树莓派.png" alt="" style="height: 60px;float: left">
+    <div style="width: 160px;height: 60px;float: left;font-size: 40px;line-height: 60px">控制界面</div>
+
+    <div class="time_box"></div>
+</div>
+
+
+<!--显示界面-->
+<div class="control_box" style="height: 285px;background-color: #a1e9d9">
+    <!--    控制A-->
+    <div class="c_box" style="left: 90px">
+        <div class="show_box" style="background-color: bisque;height: 45px;">
+            当前光照:<i class="lx" style="color:orange"></i>
+        </div>
+        <div class="img_box a" style="height: 200px;background-color: gainsboro">
+            <img src="../static/images/光照弱.png" alt="">
+        </div>
+    </div>
+    <!--    控制B-->
+    <div class="c_box" style="left: 250px">
+        <div class="show_box" style="background-color: bisque;height: 45px;">
+            当前湿度:<i class="h" style="color:blue"></i>RH
+        </div>
+        <div class="img_box b" style="height: 200px;background-color: gainsboro;">
+            <img src="../static/images/湿度低.png" alt="">
+        </div>
+    </div>
+    <!--    控制C-->
+    <div class="c_box" style="left: 390px">
+        <div class="show_box" style="background-color: bisque;height: 45px;">
+            当前温度:<i class="b_tps" style="color:red"></i>℃
+        </div>
+        <div class="img_box c" style="height: 200px;background-color: gainsboro;">
+            <img src="../static/images/温度.png" alt="">
+        </div>
+    </div>
+
+<!--    天气-->
+    <div class="c_box" style="left: 550px">
+        <div class="show_box" style="background-color: bisque;height: 45px;">天气</div>
+        <div class="wea_box" style="height: 200px;background-color: gainsboro">
+            <span class="list-group" id="cmt-list2" style="display:block;min-height:100px">
+<!--                渲染的城市天气数据-->
+
+            </span>
+        </div>
+    </div>
+</div>
+<!--按钮界面-->
+<div class="btn_box" style="background-color: lightgoldenrodyellow;height: 45px;">
+    <div class="s_btn" style="left: 320px">灯光选项</div>
+    <div class="s_btn" style="left: 560px">监控选项</div>
+    <div class="s_btn" style="left: 790px">查询天气</div>
+</div>
+
+<!--    选项界面-->
+<div class="set" style="background-color: #e6e6e6;height: 300px;">
+    <div class="set_box" style="background-color:lightgrey;">
+        <li class="cls">关闭</li>
+        <div style="font-size: 24px;position: relative;top: 30px">灯光:</div>
+        <div style="font-size: 24px;position: relative;top: 30px">灯光模式:</div>
+        <div class="open_div">
+            <!--            <i class="btn_lg" id="open" style="left: 60px;top: -33px">开</i>-->
+            <i class="btn_lgc" id="close" style="left: 60px;top: -33px">已关闭</i>
+            <i class="btn_lgs" id="shine" style="left: 105px;top: -30px">闪烁</i>
+        </div>
+    </div>
+
+    <div class="set_box" style="background-color:lightgrey;">
+        <li class="cls">关闭</li>
+        <a href="/video" class="btn_video" style="width: 80px;top: 33px;left: 20px;">查看监控</a>
+    </div>
+
+    <div class="set_box" style="background-color:lightgrey;">
+        <li class="cls">关闭</li>
+
+        <div class="row1">
+            <div>
+                <h3>请输入城市：</h3>
+                城市：<input type="text" id="city"/>
+                <br>
+                <button type="button" id="tj">查询</button>
+            </div>
+            <ul class="list-group" id="cmt-list">
+
+            </ul>
+            <audio src="" id="voice" autoplay style="display: none"></audio>
+        </div>
+
+    </div>
+
+</div>
+<script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+
+<script>
+    //禁所有文本止选中
+    document.addEventListener('selectstart', function (e) {
+        e.preventDefault();
+    })
+    //显示时间
+    setInterval(function() {var now = (new Date()).toLocaleString();
+        $('.time_box').text(now);}, 1000);
+
+    //三个选项界面切换和关闭
+    $(function () {
+        $(".btn_box .s_btn").click(function () {
+            $(this).addClass("active").siblings().removeClass("active");
+            $(".set .set_box").eq($(this).index()).show('fast').siblings().hide('fast');
+        })
+        $(".set .set_box li").click(function () {
+            $(this).eq($(this).index()).parent().hide();
+        })
+    })
+
+    <!--灯光开启关闭闪烁-->
+    $(function() {
+        $(' .set .set_box .open_div i').click(function() {
+            if (this.id=== 'close') {
+                $(this).attr('id','open').text('已开启')
+                $.post('/fopen', this.id, function(data, status) {})
+            } else if (this.id === 'open') {
+                $(this).attr('id','close').text('已关闭')
+                $.post('/fclose', this.id, function(data, status) {})
+            }
+            if (this.id === 'shine') {
+                $('#open').attr('id','close').text('已关闭')
+                $.post('/fshine', this.id, function(data, status) {})
+            }
+        })
+    })
+
+
+    $(function () {
+        $.ajax({
+            url: "https://restapi.amap.com/v3/weather/weatherInfo?key=197ad31e4c4a9c5ae4be34407624ee34&city=镇江",
+            type: "GET",
+            success: function (result) {
+                const resultJson = JSON.stringify(result);
+                const d = JSON.parse(resultJson)
+                const data = d.lives[0]
+                var str = []
+                str.push('<div>城市/区：' + data.city + '</div>');
+                str.push('<div>天气：' + data.weather + '</div>');
+                str.push('<div>温度：' + data.temperature + '℃</div>');
+                str.push('<div>风向：' + data.winddirection + '</div>');
+                str.push('<div>风力等级：' + data.windpower + '</div>');
+                str.push('<div>空气湿度：' + data.humidity + '</div>');
+                document.getElementById('cmt-list2').innerHTML = str.join('');
+            }
+        })
+
+
+        $("#tj").on('click', function () {
+            var x = $("#city").val();//获取用户输入的城市
+            // console.log(x)
+            if (x === "") {
+                alert("输入不能为空");
+            }
+            $.ajax({
+                url: "https://restapi.amap.com/v3/weather/weatherInfo?key=197ad31e4c4a9c5ae4be34407624ee34&",
+                type: "GET",
+                data: {"city": x},
+                success: function (result) {
+                    // console.log(result.count);
+                    const resultJson = JSON.stringify(result);
+                    const d = JSON.parse(resultJson)
+                    const data = d.lives[0]
+                    // console.log(d.lives[0])
+                    var str = []
+                    str.push('<div>城市/区：' + data.city + '</div>');
+                    str.push('<div>天气：' + data.weather + '</div>');
+                    str.push('<div>温度：' + data.temperature + '℃</div>');
+                    str.push('<div>风向：' + data.winddirection + '</div>');
+                    str.push('<div>风力等级：' + data.windpower + '</div>');
+                    str.push('<div>空气湿度：' + data.humidity + '</div>');
+                    document.getElementById('cmt-list').innerHTML = str.join('');
+                    document.getElementById('cmt-list2').innerHTML = str.join('');
+                    var msg='云宝已为您查询'+data.city+'天气,数据如下,温度，'
+                        +data.temperature+'摄氏度，天气'+data.weather+'，风力等级，'+data.windpower+'，空气湿度，'
+                        +data.humidity+'，云宝播报完毕'
+                    getVoice(msg)
+
+                }
+            })
+
+            function getVoice(text) {
+                $.ajax({
+                    method: 'GET',
+                    url:'http://www.liulongbin.top:3006/api/synthesize',
+                    data: {
+                        text:text
+                    },
+                    success:function (res) {
+                        console.log(res)
+                        if (res.status===200){
+                            $('#voice').attr('src',res.voiceUrl)
+                        }
+                    }
+                })
+            }
+
+        })
+
+    })
+
+    //获取温度湿度光照
+    function fn() {
+        $.ajax(
+            {
+                url:"/setData", //从setData函数中获取数据
+                type:"get",
+                data:"",
+                success:function (data) {
+                    $('.b_tps').text(data.tem)
+                    $('.h').text(data.hum)
+                    if(data.lit==='1'){
+                        $('.lx').text('明亮')
+                    }
+                    else{
+                        $('.lx').text('昏暗')
+                    }
+
+
+                }
+            }
+        )
+        return fn    // 函数中返回自身
+    }
+    setInterval(fn(), 20000)    // 定时器中，函数先执行一次
+
+</script>
+
+</body>
+</html>
